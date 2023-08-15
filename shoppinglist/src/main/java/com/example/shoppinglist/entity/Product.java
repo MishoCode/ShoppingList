@@ -19,10 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Product extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
