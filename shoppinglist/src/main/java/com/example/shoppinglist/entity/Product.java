@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
@@ -36,4 +38,11 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    public Product(String name, String description, BigDecimal price, LocalDateTime neededBefore) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.neededBefore = neededBefore;
+    }
 }
