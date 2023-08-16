@@ -1,6 +1,8 @@
 package com.example.shoppinglist.exception.advise;
 
+import com.example.shoppinglist.exception.ObjectAlreadyExistsException;
 import com.example.shoppinglist.exception.ObjectNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -21,8 +23,21 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<Object> handleNotFound(ObjectNotFoundException e) {
-        String bodyOfResponse = String.format(ERROR_MESSAGE_TEMPLATE, e.getMessage());
-        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
+        /*String bodyOfResponse = String.format(ERROR_MESSAGE_TEMPLATE, e.getMessage());
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND); */
+        return handleException(e, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ObjectAlreadyExistsException.class)
+    public ResponseEntity<Object> handleAlreadyExists(ObjectAlreadyExistsException e) {
+        return handleException(e, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(PersistenceException.class)
+    public ResponseEntity<Object> handleConstraintViolation(PersistenceException e) {
+        /*String bodyOfResponse = "{ \"error\": \"" + e.getMessage() + "\" }";
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST); */
+        return handleException(e, HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -39,5 +54,10 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
             });
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    private ResponseEntity<Object> handleException(Exception e, HttpStatus status) {
+        String bodyOfResponse = String.format(ERROR_MESSAGE_TEMPLATE, e.getMessage());
+        return new ResponseEntity<>(bodyOfResponse, status);
     }
 }
