@@ -2,6 +2,7 @@ package com.example.shoppinglist.service;
 
 import com.example.shoppinglist.dto.AddProductRequest;
 import com.example.shoppinglist.entity.Category;
+import com.example.shoppinglist.entity.CategoryType;
 import com.example.shoppinglist.entity.Product;
 import com.example.shoppinglist.exception.CategoryNotFoundException;
 import com.example.shoppinglist.exception.ProductAlreadyExistsException;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,5 +40,9 @@ public class ProductService {
 
 
         return productRepository.save(product);
+    }
+
+    public List<Product> getProductsByCategory(CategoryType categoryType) {
+        return productRepository.findAllByCategory(categoryType);
     }
 }
