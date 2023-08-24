@@ -14,13 +14,15 @@ public class UserResponse {
     private String email;
     private boolean isLocked;
     private boolean isEnabled;
+    private String token;
 
-    public static UserResponse from(User user) {
+    public static UserResponse from(User user, String token) {
         return new UserResponse(
             user.getFirstName(),
             user.getLastName(),
             user.getEmail(),
             user.isLocked(),
-            user.isEnabled());
+            user.isEnabled(),
+            token);
     }
 }

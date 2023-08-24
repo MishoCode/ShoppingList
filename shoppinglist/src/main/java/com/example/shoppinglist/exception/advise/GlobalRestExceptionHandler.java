@@ -2,6 +2,8 @@ package com.example.shoppinglist.exception.advise;
 
 import com.example.shoppinglist.exception.ObjectAlreadyExistsException;
 import com.example.shoppinglist.exception.ObjectNotFoundException;
+import com.example.shoppinglist.exception.TokenAlreadyConfirmedException;
+import com.example.shoppinglist.exception.TokenExpiredException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,16 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
         /*String bodyOfResponse = "{ \"error\": \"" + e.getMessage() + "\" }";
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST); */
         return handleException(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<Object> handleTokenExpiredException(TokenExpiredException e) {
+        return handleException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(TokenAlreadyConfirmedException.class)
+    public ResponseEntity<Object> handleTokenAlreadyConfirmedException(TokenAlreadyConfirmedException e) {
+        return handleException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
