@@ -28,4 +28,5 @@ public class RegistrationController {
     public ResponseEntity<Boolean> confirm(@RequestParam String token) {
         return ResponseEntity.ok(registrationService.confirmToken(token));
     }
+
 }

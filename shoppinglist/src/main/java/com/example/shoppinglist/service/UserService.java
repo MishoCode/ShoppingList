@@ -35,25 +35,45 @@ public class UserService implements UserDetailsService {
     public UserResponse signUpUser(User user) {
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
         if (optionalUser.isPresent()) {
-            throw new UserAlreadyExistsException(
-                String.format("Email %s has already been taken.", user.getEmail()));
+            User dbUser = optionalUser.get();
+            if (!dbUser.isEnabled() && hasTheSameFields(dbUser, user)) {
+                String newToken = generateToken(dbUser);
+                return UserResponse.from(dbUser, newToken);
+            }
+
+            if (dbUser.isEnabled() || !hasTheSameFields(dbUser, user)) {
+                throw new UserAlreadyExistsException(
+                    String.format("Email %s has already been taken.", user.getEmail()));
+            }
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
-
-        String token = UUID.randomUUID().toString();
-        VerificationToken verificationToken = new VerificationToken(
-            token,
-            LocalDateTime.now(),
-            LocalDateTime.now().plusMinutes(30),
-            user);
-        verificationTokenService.saveToken(verificationToken);
+        String token = generateToken(user);
 
         return UserResponse.from(savedUser, token);
     }
 
     public void enableUser(String email) {
         userRepository.enableUser(email);
+    }
+
+    private String generateToken(User user) {
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken(
+            token,
+            LocalDateTime.now(),
+            LocalDateTime.now().plusSeconds(60),
+            user);
+        verificationTokenService.saveToken(verificationToken);
+
+        return token;
+    }
+
+    private boolean hasTheSameFields(User dbUser, User requestUser) {
+        return dbUser.getFirstName().equals(requestUser.getFirstName()) &&
+               dbUser.getLastName().equals(requestUser.getLastName()) &&
+               dbUser.getEmail().equals(requestUser.getEmail()) &&
+               passwordEncoder.matches(requestUser.getPassword(), dbUser.getPassword());
     }
 }
