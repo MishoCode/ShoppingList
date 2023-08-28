@@ -1,6 +1,6 @@
 package com.example.shoppinglist.service;
 
-import com.example.shoppinglist.config.AppConfig;
+import com.example.shoppinglist.config.MailSenderConfig;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private JavaMailSender mailSender;
-    private AppConfig appConfig;
+    private MailSenderConfig mailSenderConfig;
 
     @Async
     public void send(String to, String emailText) {
@@ -24,7 +24,7 @@ public class EmailService {
             mimeMessageHelper.setText(emailText, true);
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject("Confirm your email");
-            mimeMessageHelper.setFrom(appConfig.getMyEmail());
+            mimeMessageHelper.setFrom(mailSenderConfig.getMyEmail());
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             throw new IllegalStateException("Failed to send email.");

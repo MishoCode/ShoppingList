@@ -1,6 +1,6 @@
 package com.example.shoppinglist.service;
 
-import com.example.shoppinglist.config.AppConfig;
+import com.example.shoppinglist.config.MailSenderConfig;
 import com.example.shoppinglist.dto.RegistrationRequest;
 import com.example.shoppinglist.dto.UserResponse;
 import com.example.shoppinglist.entity.User;
@@ -20,7 +20,7 @@ public class RegistrationService {
     private UserService userService;
     private EmailService emailService;
     private VerificationTokenService verificationTokenService;
-    private AppConfig appConfig;
+    private MailSenderConfig mailSenderConfig;
 
     public UserResponse register(RegistrationRequest request) {
         User user = new User(
@@ -34,7 +34,7 @@ public class RegistrationService {
         String token = userResponse.getToken();
 
         String link = "http://localhost:8080/users/registration/confirm?token=" + token;
-        emailService.send(appConfig.getMyEmail(), // request.getEmail()
+        emailService.send(mailSenderConfig.getMyEmail(), // request.getEmail()
             writeEmail(userResponse.getFirstName(), link));
 
         return userResponse;
