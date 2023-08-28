@@ -36,4 +36,15 @@ public class CloudinaryService {
         }
 
     }
+
+    public boolean delete(String publicId) {
+        try {
+            cloudinary.uploader().destroy(publicId, Map.of());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 }
