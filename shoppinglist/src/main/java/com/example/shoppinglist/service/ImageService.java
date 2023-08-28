@@ -3,7 +3,6 @@ package com.example.shoppinglist.service;
 import com.example.shoppinglist.dto.CloudinaryImage;
 import com.example.shoppinglist.dto.UploadImageRequest;
 import com.example.shoppinglist.entity.Image;
-import com.example.shoppinglist.exception.ImageNotInCloudException;
 import com.example.shoppinglist.repository.ImageRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public class ImageService {
     private ImageRepository imageRepository;
     private CloudinaryService cloudinaryService;
 
-    public Image addImage(UploadImageRequest request) throws IOException {
+    public Image addImage(UploadImageRequest request) {
         Image image = createImage(request.getImage(), request.getTitle());
         return imageRepository.save(image);
     }
@@ -34,7 +33,7 @@ public class ImageService {
         return false;
     }
 
-    private Image createImage(MultipartFile file, String title) throws IOException {
+    private Image createImage(MultipartFile file, String title) {
         CloudinaryImage image = cloudinaryService.upload(file);
 
         return new Image(title, image.getUrl(), image.getPublicId());

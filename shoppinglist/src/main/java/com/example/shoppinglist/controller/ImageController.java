@@ -22,12 +22,7 @@ public class ImageController {
 
     @PostMapping("/add")
     public ResponseEntity<Image> addImage(UploadImageRequest request) {
-        try {
-            return ResponseEntity.ok(imageService.addImage(request));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
-        }
+        return ResponseEntity.ok(imageService.addImage(request));
     }
 
     @DeleteMapping("/delete")

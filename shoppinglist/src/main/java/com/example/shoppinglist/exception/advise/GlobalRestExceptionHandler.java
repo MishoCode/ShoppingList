@@ -1,5 +1,6 @@
 package com.example.shoppinglist.exception.advise;
 
+import com.example.shoppinglist.exception.ImageCannotBeUploadedException;
 import com.example.shoppinglist.exception.ObjectAlreadyExistsException;
 import com.example.shoppinglist.exception.ObjectNotFoundException;
 import com.example.shoppinglist.exception.TokenAlreadyConfirmedException;
@@ -49,6 +50,11 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TokenAlreadyConfirmedException.class)
     public ResponseEntity<Object> handleTokenAlreadyConfirmedException(TokenAlreadyConfirmedException e) {
+        return handleException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ImageCannotBeUploadedException.class)
+    public ResponseEntity<Object> handleImageCannotBeUploadedException(ImageCannotBeUploadedException e) {
         return handleException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
