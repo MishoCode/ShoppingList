@@ -48,6 +48,11 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleException(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        return handleException(e, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(TokenAlreadyConfirmedException.class)
     public ResponseEntity<Object> handleTokenAlreadyConfirmedException(TokenAlreadyConfirmedException e) {
         return handleException(e, HttpStatus.INTERNAL_SERVER_ERROR);

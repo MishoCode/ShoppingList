@@ -1,6 +1,8 @@
 package com.example.shoppinglist.service;
 
+import com.example.shoppinglist.dto.UploadImageRequest;
 import com.example.shoppinglist.dto.UserResponse;
+import com.example.shoppinglist.entity.Image;
 import com.example.shoppinglist.entity.User;
 import com.example.shoppinglist.entity.VerificationToken;
 import com.example.shoppinglist.exception.UserAlreadyExistsException;
@@ -12,8 +14,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +28,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private VerificationTokenService verificationTokenService;
+    private ImageService imageService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,6 +61,26 @@ public class UserService implements UserDetailsService {
 
     public void enableUser(String email) {
         userRepository.enableUser(email);
+    }
+
+    public UserResponse addImage(Long userId, MultipartFile image) {
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new UserNotFoundException(String.format("User with id %d does not exist", userId))
+        );
+
+        Image userImage = imageService.addImage(
+            new UploadImageRequest(
+                "user_" + user.getEmail() + "_image",
+                image));
+
+        user.setImage(userImage);
+        userRepository.updateImage(userId, userImage);
+        return UserResponse.from(user, null);
+    }
+
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(u -> UserResponse.from(u, null)).toList();
     }
 
     private String generateToken(User user) {

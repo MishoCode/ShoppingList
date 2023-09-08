@@ -1,5 +1,6 @@
 package com.example.shoppinglist.repository;
 
+import com.example.shoppinglist.entity.Image;
 import com.example.shoppinglist.entity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User a " +
            "SET a.isEnabled = TRUE WHERE a.email = ?1")
     void enableUser(String email);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u " +
+           "SET u.image = ?2 " +
+           "WHERE u.id = ?1")
+    void updateImage(Long userId, Image image);
 }

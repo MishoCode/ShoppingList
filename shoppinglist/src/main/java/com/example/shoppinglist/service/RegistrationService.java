@@ -26,7 +26,7 @@ public class RegistrationService {
     private MailSenderConfig mailSenderConfig;
     private ImageService imageService;
 
-    public UserResponse register(RegistrationRequest request, MultipartFile image) {
+    public UserResponse register(RegistrationRequest request) {
         User user = new User(
             request.getFirstName(),
             request.getLastName(),
@@ -34,11 +34,11 @@ public class RegistrationService {
             request.getPassword(),
             UserRole.USER);
 
-        Image userImage = imageService.addImage(
+        /*Image userImage = imageService.addImage(
             new UploadImageRequest(
                 "user_" + user.getEmail() + "_image",
                 image));
-        user.setImage(userImage);
+        user.setImage(userImage); */
 
         UserResponse userResponse = userService.signUpUser(user);
         String token = userResponse.getToken();

@@ -18,6 +18,10 @@ public class CloudinaryService {
     private Cloudinary cloudinary;
 
     public CloudinaryImage upload(MultipartFile multipartFile) {
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new IllegalArgumentException("multipartFile cannot be null or empty");
+        }
+
         File tempFile = null;
         try {
             tempFile = File.createTempFile("temp_file", multipartFile.getOriginalFilename());

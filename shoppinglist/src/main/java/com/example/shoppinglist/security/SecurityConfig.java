@@ -25,6 +25,7 @@ public class SecurityConfig {
                 auth -> auth
                     .requestMatchers("/users/registration/**").permitAll()
                     .requestMatchers("/images/**").permitAll()
+                    .requestMatchers("/users/**").permitAll()
                     .anyRequest().authenticated()
             )
             .csrf(AbstractHttpConfigurer::disable)

@@ -20,13 +20,18 @@ public class UserResponse {
     private String token;
 
     public static UserResponse from(User user, String token) {
+        CloudinaryImage cloudinaryImage = null;
+        if (user.getImage() != null) {
+            cloudinaryImage = new CloudinaryImage(
+                user.getImage().getUrl(),
+                user.getImage().getPublicId());
+        }
+
         return new UserResponse(
             user.getFirstName(),
             user.getLastName(),
             user.getEmail(),
-            new CloudinaryImage(
-                user.getImage().getUrl(),
-                user.getImage().getPublicId()),
+            cloudinaryImage,
             user.isLocked(),
             user.isEnabled(),
             token);
