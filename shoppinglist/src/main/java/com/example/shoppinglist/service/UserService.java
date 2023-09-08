@@ -23,19 +23,12 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private VerificationTokenService verificationTokenService;
     private ImageService imageService;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(
-            () -> new UserNotFoundException(
-                String.format("User with username %s not found.", username)));
-    }
 
     public UserResponse signUpUser(User user) {
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
