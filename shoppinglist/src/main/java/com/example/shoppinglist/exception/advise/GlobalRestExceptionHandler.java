@@ -5,6 +5,8 @@ import com.example.shoppinglist.exception.ObjectAlreadyExistsException;
 import com.example.shoppinglist.exception.ObjectNotFoundException;
 import com.example.shoppinglist.exception.TokenAlreadyConfirmedException;
 import com.example.shoppinglist.exception.TokenExpiredException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -61,6 +63,11 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ImageCannotBeUploadedException.class)
     public ResponseEntity<Object> handleImageCannotBeUploadedException(ImageCannotBeUploadedException e) {
         return handleException(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Object> handleJwtException(JwtException e) {
+        return handleException(e, HttpStatus.UNAUTHORIZED);
     }
 
     @Override
