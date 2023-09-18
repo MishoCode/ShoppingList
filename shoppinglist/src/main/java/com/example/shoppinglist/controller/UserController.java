@@ -1,9 +1,11 @@
 package com.example.shoppinglist.controller;
 
 import com.example.shoppinglist.dto.UserResponse;
+import com.example.shoppinglist.security.SecurityCheck;
 import com.example.shoppinglist.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +22,10 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private SecurityCheck securityCheck;
 
     @PatchMapping("/{id}/add-image")
+    @PreAuthorize("@securityCheck.check(#userId, authentication)")
     public ResponseEntity<UserResponse> addImage(@PathVariable("id") Long userId,
                                            @RequestParam("image") MultipartFile image) {
         return ResponseEntity.ok(userService.addImage(userId, image));
