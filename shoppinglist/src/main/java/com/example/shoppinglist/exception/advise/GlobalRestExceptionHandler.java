@@ -5,7 +5,6 @@ import com.example.shoppinglist.exception.ObjectAlreadyExistsException;
 import com.example.shoppinglist.exception.ObjectNotFoundException;
 import com.example.shoppinglist.exception.TokenAlreadyConfirmedException;
 import com.example.shoppinglist.exception.TokenExpiredException;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.http.HttpHeaders;
@@ -28,8 +27,6 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<Object> handleNotFound(ObjectNotFoundException e) {
-        /*String bodyOfResponse = String.format(ERROR_MESSAGE_TEMPLATE, e.getMessage());
-        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND); */
         return handleException(e, HttpStatus.NOT_FOUND);
     }
 
@@ -40,8 +37,6 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PersistenceException.class)
     public ResponseEntity<Object> handleConstraintViolation(PersistenceException e) {
-        /*String bodyOfResponse = "{ \"error\": \"" + e.getMessage() + "\" }";
-        return new ResponseEntity<>(bodyOfResponse, HttpStatus.BAD_REQUEST); */
         return handleException(e, HttpStatus.BAD_REQUEST);
     }
 

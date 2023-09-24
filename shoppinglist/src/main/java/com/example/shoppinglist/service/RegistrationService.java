@@ -2,9 +2,7 @@ package com.example.shoppinglist.service;
 
 import com.example.shoppinglist.config.MailSenderConfig;
 import com.example.shoppinglist.dto.RegistrationRequest;
-import com.example.shoppinglist.dto.UploadImageRequest;
 import com.example.shoppinglist.dto.UserResponse;
-import com.example.shoppinglist.entity.Image;
 import com.example.shoppinglist.entity.User;
 import com.example.shoppinglist.entity.UserRole;
 import com.example.shoppinglist.entity.VerificationToken;
@@ -12,7 +10,6 @@ import com.example.shoppinglist.exception.TokenAlreadyConfirmedException;
 import com.example.shoppinglist.exception.TokenExpiredException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -33,12 +30,6 @@ public class RegistrationService {
             request.getEmail(),
             request.getPassword(),
             UserRole.USER);
-
-        /*Image userImage = imageService.addImage(
-            new UploadImageRequest(
-                "user_" + user.getEmail() + "_image",
-                image));
-        user.setImage(userImage); */
 
         UserResponse userResponse = userService.signUpUser(user);
         String token = userResponse.getToken();
