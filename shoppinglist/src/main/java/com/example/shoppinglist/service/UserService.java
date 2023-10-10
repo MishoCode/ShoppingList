@@ -73,6 +73,15 @@ public class UserService {
         return users.stream().map(u -> UserResponse.from(u, null)).toList();
     }
 
+    public UserResponse deleteUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new UserNotFoundException(String.format("User with id %d does not exist", userId))
+        );
+
+        userRepository.deleteById(userId);
+        return UserResponse.from(user, null);
+    }
+
     private String generateToken(User user) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken(

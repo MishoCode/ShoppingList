@@ -1,11 +1,13 @@
 package com.example.shoppinglist.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -43,6 +47,9 @@ public class User extends BaseEntity implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "image_id")
     private Image image;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     @Column(name = "is_locked")
     private boolean isLocked = false;

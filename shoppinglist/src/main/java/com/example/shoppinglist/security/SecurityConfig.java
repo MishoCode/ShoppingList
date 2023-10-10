@@ -1,5 +1,6 @@
 package com.example.shoppinglist.security;
 
+import com.example.shoppinglist.entity.UserRole;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ public class SecurityConfig {
                 auth -> auth
                     .requestMatchers("/users/registration/**", "/users/login/**").permitAll()
                     .requestMatchers("/images/**").permitAll()
+                    .requestMatchers("/users/*/remove").hasAnyAuthority(UserRole.ADMIN.toString())
                     .anyRequest().authenticated()
             )
             .csrf(AbstractHttpConfigurer::disable)
