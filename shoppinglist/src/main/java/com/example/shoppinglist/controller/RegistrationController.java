@@ -3,6 +3,7 @@ package com.example.shoppinglist.controller;
 import com.example.shoppinglist.dto.RegistrationRequest;
 import com.example.shoppinglist.dto.UserResponse;
 import com.example.shoppinglist.service.RegistrationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @PostMapping
-    public ResponseEntity<UserResponse> registerUser(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid RegistrationRequest request) {
         return ResponseEntity.ok(registrationService.register(request));
     }
 
